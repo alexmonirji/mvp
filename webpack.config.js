@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	entry: path.resolve(__dirname, './client/index.js'),
 	output: {
-		path: path.resolve(__dirname, './client/compiled'),
+		path: path.resolve(__dirname, './compiled'),
 		filename: 'bundle.js'
 	},
 	module: {
@@ -13,7 +13,7 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: 'babel-loader',
 				options: {
-					presets: ['react', 'env']
+					presets: ['env', 'react']
 				}
 			}
 		]
