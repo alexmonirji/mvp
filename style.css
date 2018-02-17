@@ -1,0 +1,11 @@
+#movies {
+	display: inline;
+	align: left;
+	float: left;
+}
+
+#favs {
+	display: inline;
+	align: right;
+	float: right;
+}

@@ -11,7 +11,11 @@ class MovieList extends React.Component {
 			<div>
 				{
 					this.props.movies.map((movie) => 
-						<Movie movie={movie} />
+						<Movie
+							movie={movie}
+							addToFavorites={this.props.addToFavorites}
+							key={movie.id}
+						/>
 					)
 				}
 			</div>
