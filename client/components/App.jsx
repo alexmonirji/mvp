@@ -58,13 +58,19 @@ class App extends React.Component {
 		})
 		.then(() =>
 			axios.get('/favorite')
-			.then((data) =>
+			.then((data) => {
+				let movies = context.state.movies;
+				let ids = movies.map((movie) => movie.id);
+				let index = ids.indexOf(movie.id);
+				movies.splice(index, 1);
+
 				context.setState({
-					favorites: data.data
-				})
+					favorites: data.data,
+					movies: movies
+				});
+			}).catch((err) =>
+				alert('Already added to favorites!')
 			)
-		).catch((err) =>
-			reject(err)
 		);
 	}
 

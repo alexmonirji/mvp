@@ -20,9 +20,10 @@ module.exports = {
 				ordered: false
 			})
 			.then((data) =>
-				resolve(data))
-			.catch((err) =>
-				reject(err));
+				resolve(data)
+			).catch((err) =>
+				reject(err)
+			);
 		});
 	},
 	fetch: () => {
