@@ -15,7 +15,7 @@ class App extends React.Component {
 			favorites: []
 		};
 
-		axios.get('/favorite')
+		axios.get('/favorites')
 		.then((data) =>
 			context.setState({
 				favorites: data.data
@@ -57,7 +57,7 @@ class App extends React.Component {
 			movie: movie
 		})
 		.then(() =>
-			axios.get('/favorite')
+			axios.get('/favorites')
 			.then((data) => {
 				let movies = context.state.movies;
 				let ids = movies.map((movie) => movie.id);
@@ -77,11 +77,11 @@ class App extends React.Component {
 	removeFromFavorites(movie) {
 		let context = this;
 
-		axios.post('/favorite', {
+		axios.post('/favorites', {
 			movie: movie
 		})
 		.then(() =>
-			axios.get('/favorite')
+			axios.get('/favorites')
 			.then((data) =>
 				context.setState({
 					favorites: data.data

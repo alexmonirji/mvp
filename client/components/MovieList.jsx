@@ -10,13 +10,17 @@ class MovieList extends React.Component {
 		return (
 			<div>
 				{
-					this.props.movies.map((movie) => 
-						<Movie
-							movie={movie}
-							addToFavorites={this.props.addToFavorites}
-							key={movie.id}
-						/>
-					)
+					this.props.movies.map((movie) => {
+						if (movie.poster_path) {
+							return (
+								<Movie
+									movie={movie}
+									addToFavorites={this.props.addToFavorites}
+									key={movie.id}
+								/>
+							);
+						}
+					})
 				}
 			</div>
 		);

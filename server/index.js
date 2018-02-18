@@ -14,49 +14,70 @@ app.get('/', (req, res) => {
 });
 
 app.post('/movies', (req, res) => {
-	db.save(req.body.movie)
-	.then((data) => {
-		data = JSON.stringify(data);
-		res.send(data);
+	db.saveMovie(req.body.movie)
+	.then(() => {
+		res.sendStatus(200);
 	})
-	.catch((err) =>
-		res.sendStatus(404)
-	)
+	.catch((err) => {
+		res.sendStatus(404);
+	});
 });
 
-app.get('/movies', (req, res) =>
+app.get('/movies', (req, res) => {
 	tmdb(req.query.query)
 	.then((data) => {
 		data = JSON.stringify(data.data);
 		res.send(data);
 	})
-	.catch((err) =>
-		res.sendStatus(404)
-	)
-);
+	.catch((err) => {
+		res.sendStatus(404);
+	});
+});
 
-app.post('/favorite', (req, res) =>
-	db.delete(req.body.movie)
+app.post('/favorites', (req, res) => {
+	db.deleteMovie(req.body.movie)
+	.then(() => {
+		res.sendStatus(200);
+	})
+	.catch((err) => {
+		res.sendStatus(404);
+	});
+});
+
+app.get('/favorites', (req, res) => {
+	db.fetchMovies()
 	.then((data) => {
 		data = JSON.stringify(data);
 		res.send(data);
 	})
 	.catch((err) => {
-		console.log('error');
-		res.sendStatus(404)
-	})
-);
+		res.sendStatus(404);
+	});
+});
 
-app.get('/favorite', (req, res) =>
-	db.fetch()
-	.then((data) => {
-		data = JSON.stringify(data);
-		res.send(data);
+app.post('/signup', (req, res) => {
+	db.createUser(req.body.user)
+	.then(() => {
+		res.sendStatus(200);
 	})
-	.catch((err) =>
-		res.sendStatus(404)
-	)
-);
+	.catch((err) => {
+		res.sendStatus(404);
+	});
+});
+
+app.post('/login', (req, res) => {
+	db.checkUser(req.body.user)
+	.then((data) => {
+		if (data) {
+			res.sendStatus(200);
+		} else {
+			res.sendStatus(404);
+		}
+	})
+	.catch((err) => {
+		console.log('ERROR');
+	});
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 mongoose.connect('mongodb://localhost:27017/mvp');
 
 const Movies = mongoose.model('Movies', {
@@ -7,39 +8,49 @@ const Movies = mongoose.model('Movies', {
 	poster_path: String
 });
 
-module.exports = {
-	save: (data) => {
-		return new Promise((resolve, reject) => {
-			let movies = [{
-				_id: data.id,
-				title: data.title,
-				poster_path: data.poster_path
-			}];
+const Users = mongoose.model('Users', {
+	username: {
+		type: String,
+		unique: true,
+		required: true,
+		dropDups: true
+	},
+	password: String
+});
 
-			Movies.insertMany(movies, {
-				ordered: false
-			})
-			.then((data) =>
-				resolve(data)
-			).catch((err) =>
-				reject(err)
-			);
+module.exports = {
+	saveMovie: (data) => {
+		Movies.create({
+			_id: data.id,
+			title: data.title,
+			poster_path: data.poster_path
 		});
 	},
-	fetch: () => {
-		return Movies.find()
+	fetchMovies: () => {
+		return Movies.find();
 	},
-	delete: (data) => {
-		return new Promise((resolve, reject) => {
-			Movies.remove({
-				_id: data._id
-			}, (err) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(data);
-				}
+	deleteMovie: (data) => {
+		Movies.remove({ _id: data._id });
+	},
+	createUser: (data) => {
+		bcrypt.hash(data.password, 10)
+		.then((hash) => {
+			Users.create({
+				username: data.username,
+				password: hash
 			});
+		})
+		.catch((err) => {
+			console.log('ERROR');
+		});
+	},
+	checkUser: (data) => {
+		return Users.find({ username: data.username })
+		.then(([ { password } ]) => {
+			return bcrypt.compare(data.password, password);
+		})
+		.catch((err) => {
+			console.log('ERROR');
 		});
 	}
 };
